@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "agri-mind"
+version = "0.1.0"
+description = "🌾 农智云 — AI驱动的中国智慧种植知识平台"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "MoKangMedical"}]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+keywords = ["agriculture", "farming", "AI", "crop", "disease", "China"]
+
+dependencies = [
+    "fastapi>=0.100",
+    "uvicorn>=0.20",
+    "pydantic>=2.0",
+    "openai>=1.0",
+    "Pillow>=10.0",
+    "httpx>=0.24",
+]
+
+[project.optional-dependencies]
+server = ["uvicorn[standard]", "gunicorn"]
+ai = ["openai", "litellm", "torch", "torchvision"]
+geo = ["geopy", "shapely", "rasterio"]
+all = ["agri-mind[server,ai,geo]"]
+dev = ["pytest", "ruff", "mypy"]
+
+[project.scripts]
+agri-mind = "app.main:cli"
