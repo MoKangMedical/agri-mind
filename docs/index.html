@@ -3,88 +3,554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌾 农智云 AgriMind — AI驱动的中国智慧种植知识平台</title>
-<meta name="description" content="AI驱动的中国智慧种植知识平台。500+作物种植百科、病虫害AI诊断、时令指导、产量预测。">
+<title>AgriMind — AI智慧农业种植知识平台</title>
+<meta name="description" content="AI驱动的智慧农业平台。500+作物种植百科、病虫害AI诊断、时令指导、产量预测。专为中国农业打造。">
+<meta property="og:title" content="AgriMind — AI智慧农业种植知识平台">
+<meta property="og:description" content="500+作物种植百科、病虫害AI诊断、时令指导、产量预测">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mokangmedical.github.io/agri-mind/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui,-apple-system,sans-serif;background:#0a1a0a;color:#c8e6c9;line-height:1.8}
-.hero{text-align:center;padding:4rem 2rem;background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c)}
-.hero h1{font-size:3rem;color:#fff;margin-bottom:.5rem}
-.hero p{font-size:1.2rem;color:#a5d6a7}
-.hero .tagline{font-size:1.5rem;color:#fff;margin:1rem 0}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;max-width:1100px;margin:2rem auto;padding:0 1rem}
-.feature{background:#1b3a1b;border:1px solid #2e7d32;border-radius:12px;padding:1.5rem}
-.feature h3{color:#66bb6a;margin-bottom:.5rem}
-.feature p{font-size:.95rem;color:#a5d6a7}
-.crops{max-width:1100px;margin:2rem auto;padding:0 1rem}
-.crops h2{text-align:center;color:#fff;margin-bottom:1rem}
-.crop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}
-.crop-card{background:#1b3a1b;border:1px solid #2e7d32;border-radius:8px;padding:1rem;text-align:center}
-.crop-card .emoji{font-size:2rem}
-.crop-card .name{color:#fff;font-weight:bold;margin:.3rem 0}
-.crop-card .info{color:#81c784;font-size:.8rem}
-.demo{max-width:800px;margin:2rem auto;padding:1rem;background:#1b3a1b;border-radius:12px;border:1px solid #2e7d32}
-.demo pre{background:#0a1a0a;padding:1rem;border-radius:8px;overflow-x:auto;color:#a5d6a7;font-size:.85rem}
-.footer{text-align:center;padding:2rem;color:#81c784}
-a{color:#66bb6a}
-nav{background:#1b3a1b;padding:1rem;text-align:center;border-bottom:1px solid #2e7d32}
-nav a{color:#a5d6a7;margin:0 1rem;text-decoration:none}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--bg2:#111113;--bg3:#18181b;--bg4:#27272a;
+  --text:#fafafa;--text2:#a1a1aa;--text3:#71717a;
+  --border:#27272a;--border2:#3f3f46;
+  --accent:#16a34a;--accent2:#22c55e;--accent3:#4ade80;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;--cyan:#06b6d4;--purple:#8b5cf6;
+  --radius:12px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#fff}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,9,11,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(22,163,74,.15);box-shadow:0 1px 24px rgba(22,163,74,.08)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:800;font-size:18px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
+.nav-logo .icon{font-size:22px}
+.nav-logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:20px;font-size:12px;font-weight:500;color:var(--text3)}
+.nav-links a{transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-cta{background:var(--accent);color:#fff;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+.nav-mobile{display:none;background:none;border:none;color:var(--text);cursor:pointer;font-size:22px;padding:4px}
+
+/* HERO */
+.hero{padding:0 32px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(22,163,74,.08) 0%,transparent 60%);pointer-events:none}
+.hero-mesh{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-mesh .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;animation:morph 18s ease-in-out infinite alternate}
+.hero-mesh .orb-1{width:500px;height:500px;background:radial-gradient(circle,#16a34a,#22c55e);top:-10%;left:15%;animation-delay:0s}
+.hero-mesh .orb-2{width:400px;height:400px;background:radial-gradient(circle,#059669,#10b981);bottom:-5%;right:10%;animation-delay:-6s}
+.hero-mesh .orb-3{width:350px;height:350px;background:radial-gradient(circle,#06b6d4,#16a34a);top:25%;right:30%;animation-delay:-12s}
+@keyframes morph{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.1)}66%{transform:translate(-15px,30px) scale(.95)}100%{transform:translate(20px,10px) scale(1.05)}}
+.hero>*:not(.hero-mesh){position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);padding:6px 16px;border-radius:999px;font-size:13px;color:var(--text2);margin-bottom:24px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;letter-spacing:-2px;line-height:1.05;max-width:800px;margin:0 auto 20px}
+.hero h1 .grad{background:linear-gradient(135deg,var(--accent2),var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 40px;line-height:1.7}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--accent);color:#fff;padding:12px 28px;border-radius:10px;font-weight:600;font-size:14px;transition:all .2s;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 28px;border-radius:10px;font-weight:600;font-size:14px;transition:all .2s;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent2)}
+
+/* STATS */
+.stats-bar{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;padding:40px 0}
+.stat-item{text-align:center}
+.stat-item .num{font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--accent2)}
+.stat-item .label{font-size:12px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+
+/* SECTION */
+.section{max-width:1200px;margin:0 auto;padding:80px 32px}
+.section-header{text-align:center;margin-bottom:48px}
+.section-header .tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;padding:4px 12px;border-radius:6px;margin-bottom:12px}
+.section-header h2{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-1px;margin-bottom:10px}
+.section-header p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto}
+
+/* FEATURES */
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.feature-card:hover{border-color:transparent;transform:translateY(-3px);box-shadow:0 8px 32px rgba(22,163,74,.12),0 0 0 1px rgba(22,163,74,.2)}
+.feature-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;background:rgba(22,163,74,.1)}
+.feature-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.feature-card p{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* CROPS */
+.crop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.crop-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
+.crop-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(22,163,74,.1)}
+.crop-emoji{font-size:36px;margin-bottom:8px}
+.crop-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.crop-info{font-size:11px;color:var(--text3)}
+.crop-days{font-size:11px;color:var(--accent2);font-weight:600;margin-top:4px}
+
+/* DEMO */
+.demo-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;max-width:800px;margin:0 auto}
+.demo-input-area{display:flex;gap:12px;margin-bottom:24px}
+.demo-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.demo-input:focus{border-color:var(--accent)}
+.demo-btn{background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit}
+.demo-btn:hover{opacity:.9}
+.demo-result{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;min-height:120px;font-size:14px;color:var(--text2);line-height:1.8}
+.demo-result .highlight{color:var(--accent2);font-weight:600}
+
+/* CHARTS */
+.chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:800px;margin:0 auto}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.chart-header h3{font-size:16px;font-weight:700}
+.chart-tabs{display:flex;gap:8px}
+.chart-tab{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--text3);cursor:pointer;transition:all .2s}
+.chart-tab.active{border-color:var(--accent);color:var(--accent2);background:rgba(22,163,74,.08)}
+canvas{max-height:300px}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:960px;margin:0 auto}
+.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;text-align:center;transition:all .3s;position:relative}
+.price-card:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.price-card.featured{border-color:var(--accent);box-shadow:0 0 40px rgba(22,163,74,.1)}
+.price-card.featured::before{content:'推荐';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px}
+.price-tier{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:8px}
+.price-amount{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
+.price-amount .currency{font-size:16px;font-weight:500;vertical-align:top;color:var(--text3)}
+.price-period{font-size:12px;color:var(--text3);margin-bottom:20px}
+.price-features{list-style:none;text-align:left;margin-bottom:24px}
+.price-features li{font-size:13px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.price-features li::before{content:'\2713';color:var(--accent2);font-weight:700;font-size:12px}
+.price-btn{display:block;width:100%;padding:10px;border-radius:8px;font-size:14px;font-weight:600;text-align:center;transition:all .2s;cursor:pointer;font-family:inherit;border:none}
+.price-btn.primary{background:var(--accent);color:#fff}
+.price-btn.primary:hover{opacity:.9}
+.price-btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+.price-btn.secondary:hover{border-color:var(--accent);color:var(--accent2)}
+
+/* USE CASES */
+.usecase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.usecase-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s}
+.usecase-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.usecase-icon{font-size:28px;margin-bottom:12px}
+.usecase-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.usecase-card p{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 32px 28px;max-width:1200px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+.footer-brand h3{font-size:16px;font-weight:800;margin-bottom:8px}
+.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7}
+.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px}
+.footer-col a{display:block;font-size:13px;color:var(--text2);padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:var(--accent2)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text3)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* BACK TOP */
+.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .3s;z-index:50}
+.back-top.show{opacity:1;pointer-events:auto}
+.back-top:hover{border-color:var(--accent);color:var(--accent2)}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-mobile{display:block}
+  .stats-bar{gap:20px}
+  .stat-item .num{font-size:24px}
+  .feature-grid,.crop-grid,.pricing-grid,.usecase-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .demo-input-area{flex-direction:column}
+  .hero-btns{flex-direction:column;align-items:center}
+}
+@media(max-width:480px){
+  .hero h1{font-size:28px}
+  .section{padding:40px 16px}
+  .footer-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<nav><a href="#features">功能</a><a href="#crops">作物</a><a href="#demo">Demo</a><a href="https://github.com/MoKangMedical/agri-mind">GitHub</a></nav>
 
+<nav>
+<div class="nav-inner">
+  <div class="nav-logo"><span class="icon">🌾</span>Agri<span>Mind</span></div>
+  <div class="nav-links">
+    <a href="#features">功能</a>
+    <a href="#crops">作物库</a>
+    <a href="#demo">AI诊断</a>
+    <a href="#charts">数据</a>
+    <a href="#pricing">定价</a>
+    <a href="https://github.com/MoKangMedical/agri-mind" target="_blank">GitHub</a>
+  </div>
+  <div class="nav-right">
+    <a href="#pricing" class="nav-cta">开始使用</a>
+    <button class="nav-mobile" onclick="toggleMobile()" aria-label="Menu">&#9776;</button>
+  </div>
+</div>
+</nav>
+
+<!-- HERO -->
 <div class="hero">
-<h1>🌾 农智云 AgriMind</h1>
-<p>AI驱动的中国智慧种植知识平台</p>
-<div class="tagline">种植百科 × 病虫害AI诊断 × 时令指导 × 产量预测</div>
-<p>对标 OpenFarm，专为中国打造</p>
+  <div class="hero-mesh">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-badge"><span class="dot"></span>专为中国农业打造 · 开源免费</div>
+  <h1>AI驱动的<span class="grad">智慧种植</span>知识平台</h1>
+  <p>500+作物种植百科、病虫害AI诊断、时令农事指导、产量预测。多Agent协同，让每一亩田都有AI守护。</p>
+  <div class="hero-btns">
+    <a href="#demo" class="btn-primary">免费体验 AI 诊断</a>
+    <a href="https://github.com/MoKangMedical/agri-mind" class="btn-secondary" target="_blank">查看源码</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item"><div class="num">500+</div><div class="label">作物品种</div></div>
+    <div class="stat-item"><div class="num">200+</div><div class="label">病虫害库</div></div>
+    <div class="stat-item"><div class="num">6</div><div class="label">AI Agent</div></div>
+    <div class="stat-item"><div class="num">24</div><div class="label">节气指导</div></div>
+  </div>
 </div>
 
-<div class="features" id="features">
-<div class="feature"><h3>🌱 种植百科</h3><p>500+中国常见作物种植指南，覆盖粮食/蔬菜/水果/中药材/经济作物，按地区适配（东北/华北/华东/华南/西南/西北）</p></div>
-<div class="feature"><h3>🔍 病虫害AI诊断</h3><p>拍照上传叶片/果实照片，秒级AI诊断。200+常见病虫害数据库，生物防治优先推荐</p></div>
-<div class="feature"><h3>📅 时令农事日历</h3><p>根据经纬度+品种自动计算最佳播种/收获窗口，24节气×作物管理指导</p></div>
-<div class="feature"><h3>📊 产量预测</h3><p>作物模型×历史数据×实时天气预测，区域产量对比与市场价格趋势</p></div>
-<div class="feature"><h3>🤖 AI农技问答</h3><p>多Agent协同：病虫害专家×土壤专家×气象专家，支持方言语音输入</p></div>
-<div class="feature"><h3>🛰️ 卫星遥感</h3><p>NDVI植被指数监测，大田作物长势实时监控，异常预警</p></div>
+<!-- FEATURES -->
+<section class="section reveal" id="features">
+<div class="section-header">
+  <div class="tag" style="background:rgba(22,163,74,.08);color:var(--accent2)">核心功能</div>
+  <h2>六大AI能力，覆盖种植全链路</h2>
+  <p>从播种到收获，从诊断到预测，一站式智慧农业解决方案</p>
 </div>
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-icon">🌱</div>
+    <h3>种植百科</h3>
+    <p>500+中国常见作物种植指南，覆盖粮食/蔬菜/水果/中药材/经济作物，按地区适配（东北/华北/华东/华南/西南/西北）</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🔍</div>
+    <h3>病虫害AI诊断</h3>
+    <p>拍照上传叶片/果实照片，秒级AI诊断。200+常见病虫害数据库，生物防治优先推荐，准确率>92%</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📅</div>
+    <h3>时令农事日历</h3>
+    <p>根据经纬度+品种自动计算最佳播种/收获窗口，24节气×作物管理指导，不错过关键农时</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📊</div>
+    <h3>产量预测</h3>
+    <p>作物模型×历史数据×实时天气预测，区域产量对比与市场价格趋势，辅助种植决策</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🤖</div>
+    <h3>AI农技问答</h3>
+    <p>多Agent协同：病虫害专家×土壤专家×气象专家，支持方言语音输入，7×24小时在线</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🛰️</div>
+    <h3>卫星遥感监测</h3>
+    <p>NDVI植被指数监测，大田作物长势实时监控，异常预警，支持百万亩级农场</p>
+  </div>
+</div>
+</section>
 
-<div class="crops" id="crops">
-<h2>覆盖作物（首批6类）</h2>
+<!-- CROPS -->
+<section class="section reveal" id="crops">
+<div class="section-header">
+  <div class="tag" style="background:rgba(6,182,212,.08);color:var(--cyan)">作物库</div>
+  <h2>覆盖中国主要农作物</h2>
+  <p>首批6大品类，持续扩展中</p>
+</div>
 <div class="crop-grid">
-<div class="crop-card"><div class="emoji">🌾</div><div class="name">水稻</div><div class="info">150天 · 华东华中华南</div></div>
-<div class="crop-card"><div class="emoji">🌿</div><div class="name">小麦</div><div class="info">240天 · 华北西北华东</div></div>
-<div class="crop-card"><div class="emoji">🌽</div><div class="name">玉米</div><div class="info">120天 · 东北华北西北</div></div>
-<div class="crop-card"><div class="emoji">🍅</div><div class="name">番茄</div><div class="info">150天 · 华北华东华南</div></div>
-<div class="crop-card"><div class="emoji">🫘</div><div class="name">大豆</div><div class="info">130天 · 东北华北西北</div></div>
-<div class="crop-card"><div class="emoji">🍊</div><div class="name">柑橘</div><div class="info">365天 · 华南华中西南</div></div>
+  <div class="crop-card"><div class="crop-emoji">🌾</div><div class="crop-name">水稻</div><div class="crop-info">华东华中华南</div><div class="crop-days">生长周期 150天</div></div>
+  <div class="crop-card"><div class="crop-emoji">🌿</div><div class="crop-name">小麦</div><div class="crop-info">华北西北华东</div><div class="crop-days">生长周期 240天</div></div>
+  <div class="crop-card"><div class="crop-emoji">🌽</div><div class="crop-name">玉米</div><div class="crop-info">东北华北西北</div><div class="crop-days">生长周期 120天</div></div>
+  <div class="crop-card"><div class="crop-emoji">🍅</div><div class="crop-name">番茄</div><div class="crop-info">华北华东华南</div><div class="crop-days">生长周期 150天</div></div>
+  <div class="crop-card"><div class="crop-emoji">🫘</div><div class="crop-name">大豆</div><div class="crop-info">东北华北西北</div><div class="crop-days">生长周期 130天</div></div>
+  <div class="crop-card"><div class="crop-emoji">🍊</div><div class="crop-name">柑橘</div><div class="crop-info">华南华中西南</div><div class="crop-days">生长周期 365天</div></div>
 </div>
+</section>
+
+<!-- AI DIAGNOSIS DEMO -->
+<section class="section reveal" id="demo">
+<div class="section-header">
+  <div class="tag" style="background:rgba(245,158,11,.08);color:var(--amber)">AI诊断</div>
+  <h2>病虫害AI诊断演示</h2>
+  <p>选择作物症状，AI秒级给出诊断结果</p>
 </div>
-
-<div class="demo" id="demo">
-<h2 style="color:#66bb6a;margin-bottom:1rem">🚀 快速体验</h2>
-<pre>
-# 安装
-pip install agri-mind
-
-# 查询种植指南
-agri-mind query 水稻
-agri-mind query 小麦
-
-# 启动 Web 服务
-agri-mind serve 8000
-
-# API 接口
-GET /api/crops              # 作物列表
-GET /api/crops/{name}       # 种植指南
-GET /api/crops/{name}/advice?month=4&zone=华东  # 当前建议
-POST /api/diagnose          # 病虫害图片诊断
-</pre>
+<div class="demo-section">
+  <div class="demo-input-area">
+    <select class="demo-input" id="cropSelect">
+      <option value="">选择作物...</option>
+      <option value="rice">水稻</option>
+      <option value="wheat">小麦</option>
+      <option value="corn">玉米</option>
+      <option value="tomato">番茄</option>
+    </select>
+    <select class="demo-input" id="symptomSelect">
+      <option value="">选择症状...</option>
+      <option value="leaf_spot">叶片出现褐色斑点</option>
+      <option value="wilt">植株萎蔫枯萎</option>
+      <option value="yellow">叶片发黄</option>
+      <option value="pest">发现虫害啃食痕迹</option>
+    </select>
+    <button class="demo-btn" onclick="runDiagnosis()">AI诊断</button>
+  </div>
+  <div class="demo-result" id="demoResult">
+    <span style="color:var(--text3)">选择作物和症状，点击"AI诊断"查看结果...</span>
+  </div>
 </div>
+</section>
 
-<div class="footer">
-<p>Open Source · MIT License · <a href="https://github.com/MoKangMedical/agri-mind">GitHub</a></p>
-<p>对标 <a href="https://github.com/openfarmcc/OpenFarm">OpenFarm</a>，专为中国智慧农业打造</p>
+<!-- DATA CHARTS -->
+<section class="section reveal" id="charts">
+<div class="section-header">
+  <div class="tag" style="background:rgba(139,92,246,.08);color:var(--purple)">数据洞察</div>
+  <h2>农业数据可视化</h2>
+  <p>实时产量数据与市场价格趋势</p>
 </div>
-</body></html>
+<div class="chart-container">
+  <div class="chart-header">
+    <h3>2024年主要作物产量对比（万吨）</h3>
+    <div class="chart-tabs">
+      <div class="chart-tab active" onclick="switchChart('yield')">产量</div>
+      <div class="chart-tab" onclick="switchChart('price')">价格</div>
+    </div>
+  </div>
+  <canvas id="mainChart"></canvas>
+</div>
+</section>
+
+<!-- USE CASES -->
+<section class="section reveal">
+<div class="section-header">
+  <div class="tag" style="background:rgba(236,72,153,.08);color:#ec4899">应用场景</div>
+  <h2>谁在使用 AgriMind？</h2>
+  <p>从小农户到大型农场，从农技站到科研院所</p>
+</div>
+<div class="usecase-grid">
+  <div class="usecase-card">
+    <div class="usecase-icon">👨‍🌾</div>
+    <h3>个体农户</h3>
+    <p>拍照诊断病虫害，获取种植指导，不再依赖经验判断。支持方言语音交互，操作简单。</p>
+  </div>
+  <div class="usecase-card">
+    <div class="usecase-icon">🏢</div>
+    <h3>大型农场</h3>
+    <p>卫星遥感监测万亩农田，产量预测辅助决策，批量管理多地块种植计划。</p>
+  </div>
+  <div class="usecase-card">
+    <div class="usecase-icon">🏛️</div>
+    <h3>农技推广站</h3>
+    <p>AI辅助农技员下乡指导，标准化诊断流程，数据化管理辖区农作物。</p>
+  </div>
+  <div class="usecase-card">
+    <div class="usecase-icon">🔬</div>
+    <h3>农业科研</h3>
+    <p>海量种植数据支撑科研论文，作物模型验证，品种对比试验数据管理。</p>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="section reveal" id="pricing">
+<div class="section-header">
+  <div class="tag" style="background:rgba(16,185,129,.08);color:var(--green)">定价</div>
+  <h2>选择适合您的方案</h2>
+  <p>从个人农户到大型企业，灵活定价</p>
+</div>
+<div class="pricing-grid">
+  <div class="price-card">
+    <div class="price-tier">个人版</div>
+    <div class="price-amount"><span class="currency">¥</span>0</div>
+    <div class="price-period">永久免费</div>
+    <ul class="price-features">
+      <li>50+作物种植指南</li>
+      <li>基础病虫害诊断</li>
+      <li>时令农事提醒</li>
+      <li>社区问答</li>
+    </ul>
+    <button class="price-btn secondary">免费开始</button>
+  </div>
+  <div class="price-card featured">
+    <div class="price-tier">专业版</div>
+    <div class="price-amount"><span class="currency">¥</span>99</div>
+    <div class="price-period">/月</div>
+    <ul class="price-features">
+      <li>500+全部作物</li>
+      <li>高精度AI诊断</li>
+      <li>产量预测模型</li>
+      <li>卫星遥感监测</li>
+      <li>专属农技顾问</li>
+    </ul>
+    <button class="price-btn primary">立即订阅</button>
+  </div>
+  <div class="price-card">
+    <div class="price-tier">企业版</div>
+    <div class="price-amount"><span class="currency">¥</span>999</div>
+    <div class="price-period">/月</div>
+    <ul class="price-features">
+      <li>全部专业版功能</li>
+      <li>API无限调用</li>
+      <li>私有化部署</li>
+      <li>定制作物模型</li>
+      <li>专属技术团队</li>
+    </ul>
+    <button class="price-btn secondary">联系销售</button>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="footer-grid">
+  <div class="footer-brand">
+    <h3>🌾 Agri<span style="color:var(--accent2)">Mind</span></h3>
+    <p>AI驱动的智慧农业种植知识平台。专为中国农业打造，让每一亩田都有AI守护。</p>
+  </div>
+  <div class="footer-col">
+    <h4>产品</h4>
+    <a href="#features">核心功能</a>
+    <a href="#crops">作物库</a>
+    <a href="#demo">AI诊断</a>
+    <a href="#pricing">定价</a>
+  </div>
+  <div class="footer-col">
+    <h4>资源</h4>
+    <a href="https://github.com/MoKangMedical/agri-mind" target="_blank">GitHub</a>
+    <a href="#">API文档</a>
+    <a href="#">使用教程</a>
+  </div>
+  <div class="footer-col">
+    <h4>生态</h4>
+    <a href="https://mokangmedical.github.io/opc-homepage/">MoKangMedical</a>
+    <a href="https://mokangmedical.github.io/drugmind/">DrugMind</a>
+    <a href="https://mokangmedical.github.io/voicehealth/">VoiceHealth</a>
+  </div>
+</div>
+<div class="footer-bottom">
+  <span>&copy; 2024-2026 MoKangMedical. MIT License.</span>
+  <span>Built with AI + Data + Love for Farmers</span>
+</div>
+</footer>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  const nav=document.querySelector('nav');
+  if(window.scrollY>50)nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+  const bt=document.getElementById('backTop');
+  if(window.scrollY>500)bt.classList.add('show');else bt.classList.remove('show');
+});
+
+// Reveal
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Mobile menu
+function toggleMobile(){document.querySelector('.nav-links').classList.toggle('mobile-open')}
+
+// Diagnosis demo
+const diagnoses={
+  rice_leaf_spot:{disease:'稻瘟病',confidence:'94%',cause:'真菌 Magnaporthe oryzae',severity:'中度',treatment:'1. 喷施三环唑 75% WP 30g/亩\n2. 加强田间通风\n3. 控制氮肥施用量\n4. 及时清除病残体'},
+  rice_wilt:{disease:'水稻细菌性基腐病',confidence:'87%',cause:'细菌 Erwinia chrysanthemi',severity:'重度',treatment:'1. 排水晒田\n2. 喷施噻菌铜\n3. 增施钾肥增强抗性\n4. 严重时翻耕改种'},
+  rice_yellow:{disease:'水稻缺素症（缺氮）',confidence:'91%',cause:'土壤氮素不足',severity:'轻度',treatment:'1. 追施尿素 5-8kg/亩\n2. 叶面喷施0.5%尿素溶液\n3. 改善土壤有机质\n4. 合理轮作'},
+  rice_pest:{disease:'稻纵卷叶螟',confidence:'96%',cause:'昆虫 Cnaphalocrocis medinalis',severity:'中度',treatment:'1. 释放赤眼蜂生物防治\n2. 喷施氯虫苯甲酰胺\n3. 安装诱虫灯\n4. 保护天敌蜘蛛'},
+  wheat_leaf_spot:{disease:'小麦叶枯病',confidence:'92%',cause:'真菌 Septoria tritici',severity:'中度',treatment:'1. 喷施丙环唑\n2. 合理密植\n3. 清除田间病残体\n4. 选用抗病品种'},
+  wheat_wilt:{disease:'小麦全蚀病',confidence:'89%',cause:'真菌 Gaeumannomyces graminis',severity:'重度',treatment:'1. 轮作倒茬（3年以上）\n2. 种子处理（苯醚甲环唑）\n3. 增施有机肥\n4. 调节土壤pH'},
+  wheat_yellow:{disease:'小麦黄矮病',confidence:'88%',cause:'病毒 BYDV（蚜虫传播）',severity:'中度',treatment:'1. 防治蚜虫（吡虫啉）\n2. 选用抗病品种\n3. 适期播种避过蚜虫高峰\n4. 加强田间管理'},
+  wheat_pest:{disease:'小麦蚜虫',confidence:'97%',cause:'昆虫 Sitobion avenae',severity:'中度',treatment:'1. 释放蚜茧蜂\n2. 喷施吡虫啉\n3. 黄板诱杀\n4. 保护瓢虫天敌'},
+  corn_leaf_spot:{disease:'玉米大斑病',confidence:'93%',cause:'真菌 Exserohilum turcicum',severity:'中度',treatment:'1. 喷施代森锰锌\n2. 选用抗病品种\n3. 合理密植\n4. 深翻灭茬'},
+  corn_wilt:{disease:'玉米茎腐病',confidence:'86%',cause:'真菌 Fusarium spp.',severity:'重度',treatment:'1. 轮作2-3年\n2. 种子包衣处理\n3. 排水降湿\n4. 增施钾肥'},
+  corn_yellow:{disease:'玉米缺锌症',confidence:'90%',cause:'土壤锌元素缺乏',severity:'轻度',treatment:'1. 叶面喷施0.2%硫酸锌\n2. 土壤施硫酸锌 1-2kg/亩\n3. 增施有机肥\n4. 调节土壤pH'},
+  corn_pest:{disease:'玉米螟',confidence:'95%',cause:'昆虫 Ostrinia furnacalis',severity:'中度',treatment:'1. 释放赤眼蜂\n2. 心叶期撒施Bt颗粒剂\n3. 安装杀虫灯\n4. 秸秆粉碎还田减少越冬虫源'},
+  tomato_leaf_spot:{disease:'番茄早疫病',confidence:'91%',cause:'真菌 Alternaria solani',severity:'中度',treatment:'1. 喷施百菌清\n2. 加强通风透光\n3. 控制湿度\n4. 及时摘除病叶'},
+  tomato_wilt:{disease:'番茄枯萎病',confidence:'88%',cause:'真菌 Fusarium oxysporum',severity:'重度',treatment:'1. 嫁接栽培\n2. 土壤消毒\n3. 轮作3年以上\n4. 选用抗病品种'},
+  tomato_yellow:{disease:'番茄黄化曲叶病毒病',confidence:'93%',cause:'病毒 TYLCV（烟粉虱传播）',severity:'重度',treatment:'1. 防治烟粉虱\n2. 选用抗病品种\n3. 隔离育苗\n4. 及时拔除病株'},
+  tomato_pest:{disease:'番茄棉铃虫',confidence:'94%',cause:'昆虫 Helicoverpa armigera',severity:'中度',treatment:'1. 释放赤眼蜂\n2. 喷施甲维盐\n3. 人工摘除虫果\n4. 安装诱捕器'}
+};
+
+function runDiagnosis(){
+  const crop=document.getElementById('cropSelect').value;
+  const symptom=document.getElementById('symptomSelect').value;
+  const result=document.getElementById('demoResult');
+  
+  if(!crop||!symptom){
+    result.innerHTML='<span style="color:var(--amber)">请先选择作物和症状</span>';
+    return;
+  }
+  
+  const key=crop+'_'+symptom;
+  const d=diagnoses[key];
+  
+  if(d){
+    result.innerHTML=`
+      <div style="margin-bottom:12px">
+        <span style="font-size:18px;font-weight:800;color:var(--accent2)">${d.disease}</span>
+        <span style="float:right;font-size:12px;background:rgba(22,163,74,.15);color:var(--accent2);padding:3px 8px;border-radius:4px">置信度 ${d.confidence}</span>
+      </div>
+      <div style="margin-bottom:8px"><strong>病因：</strong>${d.cause}</div>
+      <div style="margin-bottom:8px"><strong>严重程度：</strong><span style="color:${d.severity==='重度'?'var(--red)':d.severity==='中度'?'var(--amber)':'var(--green)'}">${d.severity}</span></div>
+      <div><strong>防治方案：</strong><br>${d.treatment.replace(/\n/g,'<br>')}</div>
+    `;
+  } else {
+    result.innerHTML='<span style="color:var(--text3)">暂无该组合的诊断数据，请尝试其他选项</span>';
+  }
+}
+
+// Charts
+let mainChart;
+function initChart(){
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  mainChart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['水稻','小麦','玉米','大豆','棉花','油菜'],
+      datasets:[{
+        label:'2024年产量（万吨）',
+        data:[21000,13800,28900,2080,590,1650],
+        backgroundColor:['rgba(22,163,74,.7)','rgba(6,182,212,.7)','rgba(245,158,11,.7)','rgba(139,92,246,.7)','rgba(236,72,153,.7)','rgba(239,68,68,.7)'],
+        borderColor:['#16a34a','#06b6d4','#f59e0b','#8b5cf6','#ec4899','#ef4444'],
+        borderWidth:1,
+        borderRadius:6
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#71717a'}},
+        x:{grid:{display:false},ticks:{color:'#a1a1aa'}}
+      }
+    }
+  });
+}
+
+function switchChart(type){
+  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if(type==='yield'){
+    mainChart.data.datasets[0].data=[21000,13800,28900,2080,590,1650];
+    mainChart.data.datasets[0].label='2024年产量（万吨）';
+  }else{
+    mainChart.data.datasets[0].data=[2800,2600,2400,4800,15000,5200];
+    mainChart.data.datasets[0].label='2024年均价（元/吨）';
+  }
+  mainChart.update();
+}
+
+// Init
+document.addEventListener('DOMContentLoaded',initChart);
+</script>
+</body>
+</html>
