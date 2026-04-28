@@ -1,556 +1,2130 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgriMind — AI智慧农业种植知识平台</title>
-<meta name="description" content="AI驱动的智慧农业平台。500+作物种植百科、病虫害AI诊断、时令指导、产量预测。专为中国农业打造。">
-<meta property="og:title" content="AgriMind — AI智慧农业种植知识平台">
-<meta property="og:description" content="500+作物种植百科、病虫害AI诊断、时令指导、产量预测">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mokangmedical.github.io/agri-mind/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#09090b;--bg2:#111113;--bg3:#18181b;--bg4:#27272a;
-  --text:#fafafa;--text2:#a1a1aa;--text3:#71717a;
-  --border:#27272a;--border2:#3f3f46;
-  --accent:#16a34a;--accent2:#22c55e;--accent3:#4ade80;
-  --green:#10b981;--amber:#f59e0b;--red:#ef4444;--cyan:#06b6d4;--purple:#8b5cf6;
-  --radius:12px;--radius-lg:16px;
-}
-html{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif}
-body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-::selection{background:var(--accent);color:#fff}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农智云 AgriMind - AI智能农业平台</title>
+    <meta name="description" content="农智云AgriMind是中国领先的AI驱动智慧农业平台，提供智能种植决策、气候分析、病虫害防治、灌溉优化、土壤健康监测和市场价格预测等全方位服务。">
+    <meta name="keywords" content="智慧农业,精准农业,AI农业,农业大数据,智能种植,病虫害防治">
+    <style>
+        /* ===== CSS Reset & Base ===== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,9,11,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(22,163,74,.15);box-shadow:0 1px 24px rgba(22,163,74,.08)}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-weight:800;font-size:18px;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
-.nav-logo .icon{font-size:22px}
-.nav-logo span{color:var(--accent2)}
-.nav-links{display:flex;gap:20px;font-size:12px;font-weight:500;color:var(--text3)}
-.nav-links a{transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-cta{background:var(--accent);color:#fff;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:opacity .2s}
-.nav-cta:hover{opacity:.85}
-.nav-mobile{display:none;background:none;border:none;color:var(--text);cursor:pointer;font-size:22px;padding:4px}
+        :root {
+            --primary: #1a6b3c;
+            --primary-dark: #0f4d2a;
+            --primary-light: #2d9d5c;
+            --accent: #f0a500;
+            --accent-light: #ffc940;
+            --bg-dark: #0c1f15;
+            --bg-darker: #071510;
+            --text-light: #e8f5e9;
+            --text-muted: #a5d6a7;
+            --card-bg: #132d1c;
+            --card-border: #1e4d32;
+            --gradient-green: linear-gradient(135deg, #1a6b3c 0%, #0f4d2a 50%, #071510 100%);
+            --gradient-hero: linear-gradient(180deg, rgba(12,31,21,0.85) 0%, rgba(7,21,16,0.95) 100%);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.4);
+            --shadow-card: 0 8px 32px rgba(0,0,0,0.3);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-/* HERO */
-.hero{padding:0 32px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(22,163,74,.08) 0%,transparent 60%);pointer-events:none}
-.hero-mesh{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-mesh .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;animation:morph 18s ease-in-out infinite alternate}
-.hero-mesh .orb-1{width:500px;height:500px;background:radial-gradient(circle,#16a34a,#22c55e);top:-10%;left:15%;animation-delay:0s}
-.hero-mesh .orb-2{width:400px;height:400px;background:radial-gradient(circle,#059669,#10b981);bottom:-5%;right:10%;animation-delay:-6s}
-.hero-mesh .orb-3{width:350px;height:350px;background:radial-gradient(circle,#06b6d4,#16a34a);top:25%;right:30%;animation-delay:-12s}
-@keyframes morph{0%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.1)}66%{transform:translate(-15px,30px) scale(.95)}100%{transform:translate(20px,10px) scale(1.05)}}
-.hero>*:not(.hero-mesh){position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);padding:6px 16px;border-radius:999px;font-size:13px;color:var(--text2);margin-bottom:24px}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;letter-spacing:-2px;line-height:1.05;max-width:800px;margin:0 auto 20px}
-.hero h1 .grad{background:linear-gradient(135deg,var(--accent2),var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 40px;line-height:1.7}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:var(--accent);color:#fff;padding:12px 28px;border-radius:10px;font-weight:600;font-size:14px;transition:all .2s;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer}
-.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
-.btn-secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 28px;border-radius:10px;font-weight:600;font-size:14px;transition:all .2s;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent2)}
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
 
-/* STATS */
-.stats-bar{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;padding:40px 0}
-.stat-item{text-align:center}
-.stat-item .num{font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--accent2)}
-.stat-item .label{font-size:12px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-light);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
 
-/* SECTION */
-.section{max-width:1200px;margin:0 auto;padding:80px 32px}
-.section-header{text-align:center;margin-bottom:48px}
-.section-header .tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;padding:4px 12px;border-radius:6px;margin-bottom:12px}
-.section-header h2{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-1px;margin-bottom:10px}
-.section-header p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto}
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
-/* FEATURES */
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
-.feature-card:hover{border-color:transparent;transform:translateY(-3px);box-shadow:0 8px 32px rgba(22,163,74,.12),0 0 0 1px rgba(22,163,74,.2)}
-.feature-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;background:rgba(22,163,74,.1)}
-.feature-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
-.feature-card p{font-size:13px;color:var(--text2);line-height:1.6}
+        a:hover {
+            color: var(--accent-light);
+        }
 
-/* CROPS */
-.crop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
-.crop-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
-.crop-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(22,163,74,.1)}
-.crop-emoji{font-size:36px;margin-bottom:8px}
-.crop-name{font-size:15px;font-weight:700;margin-bottom:4px}
-.crop-info{font-size:11px;color:var(--text3)}
-.crop-days{font-size:11px;color:var(--accent2);font-weight:600;margin-top:4px}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-/* DEMO */
-.demo-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;max-width:800px;margin:0 auto}
-.demo-input-area{display:flex;gap:12px;margin-bottom:24px}
-.demo-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
-.demo-input:focus{border-color:var(--accent)}
-.demo-btn{background:var(--accent);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit}
-.demo-btn:hover{opacity:.9}
-.demo-result{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;min-height:120px;font-size:14px;color:var(--text2);line-height:1.8}
-.demo-result .highlight{color:var(--accent2);font-weight:600}
+        /* ===== Navigation ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(7, 21, 16, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(30, 77, 50, 0.4);
+            padding: 0 24px;
+            transition: var(--transition);
+        }
 
-/* CHARTS */
-.chart-container{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:800px;margin:0 auto}
-.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.chart-header h3{font-size:16px;font-weight:700}
-.chart-tabs{display:flex;gap:8px}
-.chart-tab{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--text3);cursor:pointer;transition:all .2s}
-.chart-tab.active{border-color:var(--accent);color:var(--accent2);background:rgba(22,163,74,.08)}
-canvas{max-height:300px}
+        .navbar.scrolled {
+            background: rgba(7, 21, 16, 0.98);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
 
-/* PRICING */
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:960px;margin:0 auto}
-.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;text-align:center;transition:all .3s;position:relative}
-.price-card:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.price-card.featured{border-color:var(--accent);box-shadow:0 0 40px rgba(22,163,74,.1)}
-.price-card.featured::before{content:'推荐';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px}
-.price-tier{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:8px}
-.price-amount{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
-.price-amount .currency{font-size:16px;font-weight:500;vertical-align:top;color:var(--text3)}
-.price-period{font-size:12px;color:var(--text3);margin-bottom:20px}
-.price-features{list-style:none;text-align:left;margin-bottom:24px}
-.price-features li{font-size:13px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.price-features li::before{content:'\2713';color:var(--accent2);font-weight:700;font-size:12px}
-.price-btn{display:block;width:100%;padding:10px;border-radius:8px;font-size:14px;font-weight:600;text-align:center;transition:all .2s;cursor:pointer;font-family:inherit;border:none}
-.price-btn.primary{background:var(--accent);color:#fff}
-.price-btn.primary:hover{opacity:.9}
-.price-btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
-.price-btn.secondary:hover{border-color:var(--accent);color:var(--accent2)}
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
 
-/* USE CASES */
-.usecase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.usecase-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s}
-.usecase-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.usecase-icon{font-size:28px;margin-bottom:12px}
-.usecase-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
-.usecase-card p{font-size:13px;color:var(--text2);line-height:1.6}
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
 
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:48px 32px 28px;max-width:1200px;margin:0 auto}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
-.footer-brand h3{font-size:16px;font-weight:800;margin-bottom:8px}
-.footer-brand p{font-size:13px;color:var(--text3);line-height:1.7}
-.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px}
-.footer-col a{display:block;font-size:13px;color:var(--text2);padding:4px 0;transition:color .2s}
-.footer-col a:hover{color:var(--accent2)}
-.footer-bottom{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text3)}
+        .nav-logo svg {
+            width: 36px;
+            height: 36px;
+        }
 
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
-.reveal.visible{opacity:1;transform:translateY(0)}
+        .nav-logo .logo-cn {
+            color: var(--accent);
+        }
 
-/* BACK TOP */
-.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .3s;z-index:50}
-.back-top.show{opacity:1;pointer-events:auto}
-.back-top:hover{border-color:var(--accent);color:var(--accent2)}
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
 
-@media(max-width:768px){
-  .nav-links{display:none}
-  .nav-mobile{display:block}
-  .stats-bar{gap:20px}
-  .stat-item .num{font-size:24px}
-  .feature-grid,.crop-grid,.pricing-grid,.usecase-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
-  .demo-input-area{flex-direction:column}
-  .hero-btns{flex-direction:column;align-items:center}
-}
-@media(max-width:480px){
-  .hero h1{font-size:28px}
-  .section{padding:40px 16px}
-  .footer-grid{grid-template-columns:1fr}
-}
-</style>
+        .nav-links a {
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-light);
+            background: rgba(45, 157, 92, 0.15);
+        }
+
+        .nav-projects {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            padding-left: 16px;
+            border-left: 1px solid var(--card-border);
+        }
+
+        .nav-projects a {
+            color: var(--text-muted);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            background: rgba(26, 107, 60, 0.1);
+            border: 1px solid rgba(30, 77, 50, 0.3);
+        }
+
+        .nav-projects a:hover {
+            background: rgba(26, 107, 60, 0.25);
+            color: var(--accent-light);
+            border-color: var(--primary-light);
+        }
+
+        .nav-projects a.current {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-light);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-green);
+            overflow: hidden;
+            padding: 100px 24px 60px;
+        }
+
+        .hero-bg-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            background-image: 
+                radial-gradient(circle at 20% 50%, var(--primary-light) 1px, transparent 1px),
+                radial-gradient(circle at 80% 20%, var(--primary-light) 1px, transparent 1px),
+                radial-gradient(circle at 50% 80%, var(--primary-light) 1px, transparent 1px);
+            background-size: 60px 60px, 80px 80px, 100px 100px;
+            animation: bgFloat 30s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -10px); }
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(45, 157, 92, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        .hero-glow-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(240, 165, 0, 0.08) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(26, 107, 60, 0.3);
+            border: 1px solid rgba(45, 157, 92, 0.4);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            color: var(--accent-light);
+            margin-bottom: 28px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #a5d6a7 50%, #f0a500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: rgba(165, 214, 167, 0.8);
+            max-width: 650px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            box-shadow: 0 4px 20px rgba(26, 107, 60, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26, 107, 60, 0.6);
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #e09500);
+            color: var(--bg-dark);
+            box-shadow: 0 4px 20px rgba(240, 165, 0, 0.3);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(240, 165, 0, 0.5);
+            color: var(--bg-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid rgba(45, 157, 92, 0.5);
+        }
+
+        .btn-outline:hover {
+            background: rgba(45, 157, 92, 0.15);
+            border-color: var(--primary-light);
+            color: var(--text-light);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* ===== Section Common ===== */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ===== Features Section ===== */
+        .features {
+            background: var(--bg-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-card);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: rgba(26, 107, 60, 0.15);
+            border: 1px solid rgba(45, 157, 92, 0.2);
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--primary-light);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(240, 165, 0, 0.1);
+            border: 1px solid rgba(240, 165, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ===== Demo Section ===== */
+        .demo-section {
+            background: var(--bg-darker);
+        }
+
+        .demo-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            background: rgba(26, 107, 60, 0.15);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .demo-header-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .demo-header-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-header-dots span:nth-child(1) { background: #ff5f57; }
+        .demo-header-dots span:nth-child(2) { background: #ffbd2e; }
+        .demo-header-dots span:nth-child(3) { background: #28ca41; }
+
+        .demo-header-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .demo-body {
+            padding: 36px;
+        }
+
+        .demo-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .form-group select,
+        .form-group input {
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition);
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .form-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a5d6a7' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(45, 157, 92, 0.15);
+        }
+
+        .demo-btn {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .demo-btn:hover {
+            box-shadow: 0 4px 20px rgba(26, 107, 60, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .demo-result {
+            background: var(--bg-dark);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 28px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .demo-result.visible {
+            display: block;
+        }
+
+        .demo-result h4 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .result-item {
+            background: rgba(26, 107, 60, 0.1);
+            border: 1px solid rgba(45, 157, 92, 0.2);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .result-item-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .result-item-value {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        /* ===== Pricing Section ===== */
+        .pricing {
+            background: var(--bg-dark);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            transform: scale(1.04);
+            box-shadow: 0 0 40px rgba(240, 165, 0, 0.15);
+        }
+
+        .pricing-card.popular::before {
+            content: '最受欢迎';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent), #e09500);
+            color: var(--bg-dark);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 20px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.04) translateY(-4px);
+        }
+
+        .pricing-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .pricing-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .pricing-price {
+            margin-bottom: 28px;
+        }
+
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-light);
+            line-height: 1;
+        }
+
+        .pricing-amount .currency {
+            font-size: 1.2rem;
+            vertical-align: super;
+            color: var(--accent);
+        }
+
+        .pricing-period {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(30, 77, 50, 0.2);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--primary-light);
+            fill: none;
+            stroke-width: 2.5;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ===== Testimonials ===== */
+        .testimonials {
+            background: var(--bg-darker);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .testimonial-stars {
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 14px;
+        }
+
+        .testimonial-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(26, 107, 60, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== CTA Section ===== */
+        .cta-section {
+            background: var(--gradient-green);
+            text-align: center;
+            padding: 80px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(45, 157, 92, 0.2) 0%, transparent 70%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: var(--bg-darker);
+            border-top: 1px solid var(--card-border);
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 12px;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--card-border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            font-size: 0.82rem;
+            color: rgba(165, 214, 167, 0.5);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(26, 107, 60, 0.15);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .footer-social a svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-muted);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .nav-links, .nav-projects {
+                display: none;
+            }
+
+            .nav-links.open, .nav-projects.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(7, 21, 16, 0.98);
+                padding: 20px;
+                border-bottom: 1px solid var(--card-border);
+            }
+
+            .nav-projects.open {
+                top: auto;
+                position: relative;
+                border-bottom: none;
+                padding-top: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-form {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-4px);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-stats {
+                gap: 30px;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                max-width: 300px;
+            }
+        }
+
+        /* ===== Scroll Animations ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
 
-<nav>
-<div class="nav-inner">
-  <div class="nav-logo"><span class="icon">🌾</span>Agri<span>Mind</span></div>
-  <div class="nav-links">
-    <a href="#features">功能</a>
-    <a href="#crops">作物库</a>
-    <a href="#demo">AI诊断</a>
-    <a href="#charts">数据</a>
-    <a href="#pricing">定价</a>
-    <a href="https://github.com/MoKangMedical/agri-mind" target="_blank">GitHub</a>
-  </div>
-  <div class="nav-right">
-    <a href="#pricing" class="nav-cta">开始使用</a>
-    <button class="nav-mobile" onclick="toggleMobile()" aria-label="Menu">&#9776;</button>
-  </div>
-</div>
+<!-- ===== Navigation ===== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="16" stroke="#2d9d5c" stroke-width="2"/>
+                <path d="M18 8 C18 8 10 14 10 20 C10 24.4 13.6 28 18 28 C22.4 28 26 24.4 26 20 C26 14 18 8 18 8Z" fill="#1a6b3c" stroke="#2d9d5c" stroke-width="1.5"/>
+                <path d="M18 14 L18 24 M14 20 L22 20" stroke="#f0a500" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>农智云 <span class="logo-cn">AgriMind</span></span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#features" class="active">核心功能</a></li>
+            <li><a href="#demo">在线演示</a></li>
+            <li><a href="#pricing">价格方案</a></li>
+            <li><a href="#testimonials">用户评价</a></li>
+        </ul>
+
+        <div class="nav-projects" id="navProjects">
+            <a href="#" class="current">农智云</a>
+            <a href="#">健康监测</a>
+            <a href="#">供应链</a>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+    </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-mesh">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
-  <div class="hero-badge"><span class="dot"></span>专为中国农业打造 · 开源免费</div>
-  <h1>AI驱动的<span class="grad">智慧种植</span>知识平台</h1>
-  <p>500+作物种植百科、病虫害AI诊断、时令农事指导、产量预测。多Agent协同，让每一亩田都有AI守护。</p>
-  <div class="hero-btns">
-    <a href="#demo" class="btn-primary">免费体验 AI 诊断</a>
-    <a href="https://github.com/MoKangMedical/agri-mind" class="btn-secondary" target="_blank">查看源码</a>
-  </div>
-  <div class="stats-bar">
-    <div class="stat-item"><div class="num">500+</div><div class="label">作物品种</div></div>
-    <div class="stat-item"><div class="num">200+</div><div class="label">病虫害库</div></div>
-    <div class="stat-item"><div class="num">6</div><div class="label">AI Agent</div></div>
-    <div class="stat-item"><div class="num">24</div><div class="label">节气指导</div></div>
-  </div>
-</div>
+<!-- ===== Hero Section ===== -->
+<section class="hero" id="hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
 
-<!-- FEATURES -->
-<section class="section reveal" id="features">
-<div class="section-header">
-  <div class="tag" style="background:rgba(22,163,74,.08);color:var(--accent2)">核心功能</div>
-  <h2>六大AI能力，覆盖种植全链路</h2>
-  <p>从播种到收获，从诊断到预测，一站式智慧农业解决方案</p>
-</div>
-<div class="feature-grid">
-  <div class="feature-card">
-    <div class="feature-icon">🌱</div>
-    <h3>种植百科</h3>
-    <p>500+中国常见作物种植指南，覆盖粮食/蔬菜/水果/中药材/经济作物，按地区适配（东北/华北/华东/华南/西南/西北）</p>
-  </div>
-  <div class="feature-card">
-    <div class="feature-icon">🔍</div>
-    <h3>病虫害AI诊断</h3>
-    <p>拍照上传叶片/果实照片，秒级AI诊断。200+常见病虫害数据库，生物防治优先推荐，准确率>92%</p>
-  </div>
-  <div class="feature-card">
-    <div class="feature-icon">📅</div>
-    <h3>时令农事日历</h3>
-    <p>根据经纬度+品种自动计算最佳播种/收获窗口，24节气×作物管理指导，不错过关键农时</p>
-  </div>
-  <div class="feature-card">
-    <div class="feature-icon">📊</div>
-    <h3>产量预测</h3>
-    <p>作物模型×历史数据×实时天气预测，区域产量对比与市场价格趋势，辅助种植决策</p>
-  </div>
-  <div class="feature-card">
-    <div class="feature-icon">🤖</div>
-    <h3>AI农技问答</h3>
-    <p>多Agent协同：病虫害专家×土壤专家×气象专家，支持方言语音输入，7×24小时在线</p>
-  </div>
-  <div class="feature-card">
-    <div class="feature-icon">🛰️</div>
-    <h3>卫星遥感监测</h3>
-    <p>NDVI植被指数监测，大田作物长势实时监控，异常预警，支持百万亩级农场</p>
-  </div>
-</div>
-</section>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            中国领先AI智慧农业平台
+        </div>
 
-<!-- CROPS -->
-<section class="section reveal" id="crops">
-<div class="section-header">
-  <div class="tag" style="background:rgba(6,182,212,.08);color:var(--cyan)">作物库</div>
-  <h2>覆盖中国主要农作物</h2>
-  <p>首批6大品类，持续扩展中</p>
-</div>
-<div class="crop-grid">
-  <div class="crop-card"><div class="crop-emoji">🌾</div><div class="crop-name">水稻</div><div class="crop-info">华东华中华南</div><div class="crop-days">生长周期 150天</div></div>
-  <div class="crop-card"><div class="crop-emoji">🌿</div><div class="crop-name">小麦</div><div class="crop-info">华北西北华东</div><div class="crop-days">生长周期 240天</div></div>
-  <div class="crop-card"><div class="crop-emoji">🌽</div><div class="crop-name">玉米</div><div class="crop-info">东北华北西北</div><div class="crop-days">生长周期 120天</div></div>
-  <div class="crop-card"><div class="crop-emoji">🍅</div><div class="crop-name">番茄</div><div class="crop-info">华北华东华南</div><div class="crop-days">生长周期 150天</div></div>
-  <div class="crop-card"><div class="crop-emoji">🫘</div><div class="crop-name">大豆</div><div class="crop-info">东北华北西北</div><div class="crop-days">生长周期 130天</div></div>
-  <div class="crop-card"><div class="crop-emoji">🍊</div><div class="crop-name">柑橘</div><div class="crop-info">华南华中西南</div><div class="crop-days">生长周期 365天</div></div>
-</div>
-</section>
+        <h1>用人工智能<br>重新定义中国农业</h1>
 
-<!-- AI DIAGNOSIS DEMO -->
-<section class="section reveal" id="demo">
-<div class="section-header">
-  <div class="tag" style="background:rgba(245,158,11,.08);color:var(--amber)">AI诊断</div>
-  <h2>病虫害AI诊断演示</h2>
-  <p>选择作物症状，AI秒级给出诊断结果</p>
-</div>
-<div class="demo-section">
-  <div class="demo-input-area">
-    <select class="demo-input" id="cropSelect">
-      <option value="">选择作物...</option>
-      <option value="rice">水稻</option>
-      <option value="wheat">小麦</option>
-      <option value="corn">玉米</option>
-      <option value="tomato">番茄</option>
-    </select>
-    <select class="demo-input" id="symptomSelect">
-      <option value="">选择症状...</option>
-      <option value="leaf_spot">叶片出现褐色斑点</option>
-      <option value="wilt">植株萎蔫枯萎</option>
-      <option value="yellow">叶片发黄</option>
-      <option value="pest">发现虫害啃食痕迹</option>
-    </select>
-    <button class="demo-btn" onclick="runDiagnosis()">AI诊断</button>
-  </div>
-  <div class="demo-result" id="demoResult">
-    <span style="color:var(--text3)">选择作物和症状，点击"AI诊断"查看结果...</span>
-  </div>
-</div>
-</section>
+        <p class="hero-subtitle">农智云 AgriMind — 您的AI智慧农业助手</p>
 
-<!-- DATA CHARTS -->
-<section class="section reveal" id="charts">
-<div class="section-header">
-  <div class="tag" style="background:rgba(139,92,246,.08);color:var(--purple)">数据洞察</div>
-  <h2>农业数据可视化</h2>
-  <p>实时产量数据与市场价格趋势</p>
-</div>
-<div class="chart-container">
-  <div class="chart-header">
-    <h3>2024年主要作物产量对比（万吨）</h3>
-    <div class="chart-tabs">
-      <div class="chart-tab active" onclick="switchChart('yield')">产量</div>
-      <div class="chart-tab" onclick="switchChart('price')">价格</div>
+        <p class="hero-desc">
+            基于深度学习与大数据分析，为全国农户提供精准种植决策、气候预测、
+            病虫害防治、智能灌溉、土壤监测及市场行情分析等全链路服务。
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#demo" class="btn btn-accent">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21"/></svg>
+                免费体验
+            </a>
+            <a href="#features" class="btn btn-outline">
+                了解更多
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num" id="statUsers">50,000+</div>
+                <div class="hero-stat-label">服务农户</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">28省</div>
+                <div class="hero-stat-label">覆盖省份</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">96.8%</div>
+                <div class="hero-stat-label">预测准确率</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">35%</div>
+                <div class="hero-stat-label">平均增产</div>
+            </div>
+        </div>
     </div>
-  </div>
-  <canvas id="mainChart"></canvas>
-</div>
 </section>
 
-<!-- USE CASES -->
-<section class="section reveal">
-<div class="section-header">
-  <div class="tag" style="background:rgba(236,72,153,.08);color:#ec4899">应用场景</div>
-  <h2>谁在使用 AgriMind？</h2>
-  <p>从小农户到大型农场，从农技站到科研院所</p>
-</div>
-<div class="usecase-grid">
-  <div class="usecase-card">
-    <div class="usecase-icon">👨‍🌾</div>
-    <h3>个体农户</h3>
-    <p>拍照诊断病虫害，获取种植指导，不再依赖经验判断。支持方言语音交互，操作简单。</p>
-  </div>
-  <div class="usecase-card">
-    <div class="usecase-icon">🏢</div>
-    <h3>大型农场</h3>
-    <p>卫星遥感监测万亩农田，产量预测辅助决策，批量管理多地块种植计划。</p>
-  </div>
-  <div class="usecase-card">
-    <div class="usecase-icon">🏛️</div>
-    <h3>农技推广站</h3>
-    <p>AI辅助农技员下乡指导，标准化诊断流程，数据化管理辖区农作物。</p>
-  </div>
-  <div class="usecase-card">
-    <div class="usecase-icon">🔬</div>
-    <h3>农业科研</h3>
-    <p>海量种植数据支撑科研论文，作物模型验证，品种对比试验数据管理。</p>
-  </div>
-</div>
+<!-- ===== Features Section ===== -->
+<section class="section features" id="features">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">核心功能</div>
+            <h2 class="section-title">六大AI驱动智能模块</h2>
+            <p class="section-desc">覆盖农业生产全流程，从播种到收获，从田间到市场，AI全程护航</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature 1: Smart Planting -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22V8"/>
+                        <path d="M5 12H2a10 10 0 0020 0h-3"/>
+                        <path d="M12 8a6 6 0 00-6-6c0 6 6 6 6 6"/>
+                        <path d="M12 8a6 6 0 016-6c0 6-6 6-6 6"/>
+                    </svg>
+                </div>
+                <h3>智能种植决策</h3>
+                <p>基于土壤数据、气候条件和历史产量，AI为您推荐最佳种植品种、种植时间和密度方案，提升作物产量与品质。</p>
+                <span class="feature-tag">AI推荐引擎</span>
+            </div>
+
+            <!-- Feature 2: Climate Data -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2v2"/>
+                        <path d="M12 20v2"/>
+                        <path d="m4.93 4.93 1.41 1.41"/>
+                        <path d="m17.66 17.66 1.41 1.41"/>
+                        <path d="M2 12h2"/>
+                        <path d="M20 12h2"/>
+                        <path d="m6.34 17.66-1.41 1.41"/>
+                        <path d="m19.07 4.93-1.41 1.41"/>
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                </div>
+                <h3>气候数据分析</h3>
+                <p>融合卫星遥感、地面气象站与物联网传感器数据，提供精准的7-30天农业气象预报与灾害预警，助您提前应对极端天气。</p>
+                <span class="feature-tag">多源数据融合</span>
+            </div>
+
+            <!-- Feature 3: Pest Prevention -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 2l1.88 1.88"/>
+                        <path d="M14.12 3.88L16 2"/>
+                        <path d="M9 7.13v-1a3.003 3.003 0 116 0v1"/>
+                        <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 014-4h4a4 4 0 014 4v3c0 3.3-2.7 6-6 6"/>
+                        <path d="M12 20v-9"/>
+                        <path d="M6.53 9C4.6 8.8 3 7.1 3 5"/>
+                        <path d="M6 13H2"/>
+                        <path d="M3 21c0-2.1 1.7-3.9 3.8-4"/>
+                        <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/>
+                        <path d="M22 13h-4"/>
+                        <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/>
+                    </svg>
+                </div>
+                <h3>病虫害防治</h3>
+                <p>通过AI图像识别技术，手机拍照即可快速诊断病虫害类型，智能推荐生物防治与绿色用药方案，减少农药使用量达40%。</p>
+                <span class="feature-tag">图像识别诊断</span>
+            </div>
+
+            <!-- Feature 4: Irrigation -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22a7 7 0 007-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 007 7z"/>
+                        <path d="M12 22V12"/>
+                    </svg>
+                </div>
+                <h3>灌溉优化</h3>
+                <p>基于实时土壤湿度、天气预报和作物生长周期，智能规划灌溉方案，节水高达30%，确保每滴水都用在刀刃上。</p>
+                <span class="feature-tag">节水30%</span>
+            </div>
+
+            <!-- Feature 5: Soil Health -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2 22h20"/>
+                        <path d="M3 18h18"/>
+                        <path d="M5 14h14"/>
+                        <path d="M7 10h10"/>
+                        <path d="M9 6h6"/>
+                        <path d="M12 2v4"/>
+                        <path d="M8 18c0-2 1.5-3 4-3s4 1 4 3"/>
+                    </svg>
+                </div>
+                <h3>土壤健康监测</h3>
+                <p>实时监测土壤pH值、有机质、氮磷钾等关键指标，生成土壤健康档案，精准指导施肥方案，改善土壤生态环境。</p>
+                <span class="feature-tag">实时监测</span>
+            </div>
+
+            <!-- Feature 6: Market Price -->
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                        <path d="M7 10h4v4"/>
+                    </svg>
+                </div>
+                <h3>市场价格预测</h3>
+                <p>接入全国农产品批发市场实时数据，结合AI行情分析模型，提前预判价格走势，帮助农户选择最佳销售时机，收益提升20%。</p>
+                <span class="feature-tag">行情预测</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- PRICING -->
-<section class="section reveal" id="pricing">
-<div class="section-header">
-  <div class="tag" style="background:rgba(16,185,129,.08);color:var(--green)">定价</div>
-  <h2>选择适合您的方案</h2>
-  <p>从个人农户到大型企业，灵活定价</p>
-</div>
-<div class="pricing-grid">
-  <div class="price-card">
-    <div class="price-tier">个人版</div>
-    <div class="price-amount"><span class="currency">¥</span>0</div>
-    <div class="price-period">永久免费</div>
-    <ul class="price-features">
-      <li>50+作物种植指南</li>
-      <li>基础病虫害诊断</li>
-      <li>时令农事提醒</li>
-      <li>社区问答</li>
-    </ul>
-    <button class="price-btn secondary">免费开始</button>
-  </div>
-  <div class="price-card featured">
-    <div class="price-tier">专业版</div>
-    <div class="price-amount"><span class="currency">¥</span>99</div>
-    <div class="price-period">/月</div>
-    <ul class="price-features">
-      <li>500+全部作物</li>
-      <li>高精度AI诊断</li>
-      <li>产量预测模型</li>
-      <li>卫星遥感监测</li>
-      <li>专属农技顾问</li>
-    </ul>
-    <button class="price-btn primary">立即订阅</button>
-  </div>
-  <div class="price-card">
-    <div class="price-tier">企业版</div>
-    <div class="price-amount"><span class="currency">¥</span>999</div>
-    <div class="price-period">/月</div>
-    <ul class="price-features">
-      <li>全部专业版功能</li>
-      <li>API无限调用</li>
-      <li>私有化部署</li>
-      <li>定制作物模型</li>
-      <li>专属技术团队</li>
-    </ul>
-    <button class="price-btn secondary">联系销售</button>
-  </div>
-</div>
+<!-- ===== Interactive Demo Section ===== -->
+<section class="section demo-section" id="demo">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">在线演示</div>
+            <h2 class="section-title">体验AI种植推荐</h2>
+            <p class="section-desc">选择您的地区和作物类型，获取AI个性化种植建议</p>
+        </div>
+
+        <div class="demo-container fade-in">
+            <div class="demo-header">
+                <div class="demo-header-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="demo-header-title">AgriMind Planting Advisor v3.2</div>
+            </div>
+            <div class="demo-body">
+                <div class="demo-form" id="demoForm">
+                    <div class="form-group">
+                        <label for="region">选择种植地区</label>
+                        <select id="region">
+                            <option value="">-- 请选择地区 --</option>
+                            <option value="north">华北平原（河北、山东、河南）</option>
+                            <option value="northeast">东北平原（黑龙江、吉林、辽宁）</option>
+                            <option value="yangtze">长江中下游（江苏、安徽、湖北）</option>
+                            <option value="south">华南地区（广东、广西、福建）</option>
+                            <option value="southwest">西南地区（四川、云南、贵州）</option>
+                            <option value="northwest">西北地区（陕西、甘肃、新疆）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="crop">选择作物类型</label>
+                        <select id="crop">
+                            <option value="">-- 请选择作物 --</option>
+                            <option value="wheat">小麦</option>
+                            <option value="rice">水稻</option>
+                            <option value="corn">玉米</option>
+                            <option value="soybean">大豆</option>
+                            <option value="cotton">棉花</option>
+                            <option value="vegetable">蔬菜大棚</option>
+                        </select>
+                    </div>
+                    <button class="demo-btn" onclick="generateRecommendation()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:6px"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        获取AI种植推荐
+                    </button>
+                </div>
+
+                <div class="demo-result" id="demoResult">
+                    <h4>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        AI分析结果
+                    </h4>
+                    <div class="demo-result-grid" id="resultGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-<div class="footer-grid">
-  <div class="footer-brand">
-    <h3>🌾 Agri<span style="color:var(--accent2)">Mind</span></h3>
-    <p>AI驱动的智慧农业种植知识平台。专为中国农业打造，让每一亩田都有AI守护。</p>
-  </div>
-  <div class="footer-col">
-    <h4>产品</h4>
-    <a href="#features">核心功能</a>
-    <a href="#crops">作物库</a>
-    <a href="#demo">AI诊断</a>
-    <a href="#pricing">定价</a>
-  </div>
-  <div class="footer-col">
-    <h4>资源</h4>
-    <a href="https://github.com/MoKangMedical/agri-mind" target="_blank">GitHub</a>
-    <a href="#">API文档</a>
-    <a href="#">使用教程</a>
-  </div>
-  <div class="footer-col">
-    <h4>生态</h4>
-    <a href="https://mokangmedical.github.io/opc-homepage/">MoKangMedical</a>
-    <a href="https://mokangmedical.github.io/drugmind/">DrugMind</a>
-    <a href="https://mokangmedical.github.io/voicehealth/">VoiceHealth</a>
-  </div>
-</div>
-<div class="footer-bottom">
-  <span>&copy; 2024-2026 MoKangMedical. MIT License.</span>
-  <span>Built with AI + Data + Love for Farmers</span>
-</div>
+<!-- ===== Pricing Section ===== -->
+<section class="section pricing" id="pricing">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">价格方案</div>
+            <h2 class="section-title">选择适合您的方案</h2>
+            <p class="section-desc">灵活定价，从小农户到大型农业企业，都有适合的解决方案</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Plan 1: 小农户 -->
+            <div class="pricing-card fade-in">
+                <div class="pricing-name">小农户</div>
+                <div class="pricing-desc">适合家庭农场与个体种植户</div>
+                <div class="pricing-price">
+                    <div class="pricing-amount"><span class="currency">¥</span>0</div>
+                    <div class="pricing-period">永久免费</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        5亩以内土地管理
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        基础种植建议
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        7天天气预报
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        病虫害识别（每日5次）
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        社区支持
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-outline">免费注册</a>
+            </div>
+
+            <!-- Plan 2: 种植大户 (Popular) -->
+            <div class="pricing-card popular fade-in">
+                <div class="pricing-name">种植大户</div>
+                <div class="pricing-desc">适合合作社与中型农场</div>
+                <div class="pricing-price">
+                    <div class="pricing-amount"><span class="currency">¥</span>199</div>
+                    <div class="pricing-period">/月（年付享8折）</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        500亩以内土地管理
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        全功能AI种植决策
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        30天精准气象预报
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        病虫害无限识别
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        智能灌溉规划
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        市场价格分析
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        专属农技顾问
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-accent">立即订阅</a>
+            </div>
+
+            <!-- Plan 3: 农业企业 -->
+            <div class="pricing-card fade-in">
+                <div class="pricing-name">农业企业</div>
+                <div class="pricing-desc">适合大型农企与集团公司</div>
+                <div class="pricing-price">
+                    <div class="pricing-amount"><span class="currency">¥</span>699</div>
+                    <div class="pricing-period">/月（年付享7折）</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        无限土地面积管理
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        全部高级功能
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        多卫星数据融合
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        供应链优化
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        API接口开放
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        私有化部署
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        7×24专属客服
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-primary">联系销售</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Testimonials Section ===== -->
+<section class="section testimonials" id="testimonials">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">用户评价</div>
+            <h2 class="section-title">来自田间的真实声音</h2>
+            <p class="section-desc">听听使用农智云的农户怎么说</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"用了农智云之后，我家200亩小麦增产了将近30%。AI推荐的播种时间和密度非常准确，比我自己摸索强太多了。"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">张</div>
+                    <div>
+                        <div class="testimonial-name">张建国</div>
+                        <div class="testimonial-role">河南新乡 · 种植大户</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"病虫害识别功能太实用了！以前发现虫害手忙脚乱，现在手机一拍就知道怎么治，还能推荐生物防治方案，少用了不少农药。"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">李</div>
+                    <div>
+                        <div class="testimonial-name">李秀英</div>
+                        <div class="testimonial-role">山东寿光 · 蔬菜大棚种植户</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"市场价格预测帮了我们大忙。去年秋粮收获前系统提示粮价上涨，我们推迟了一周出售，多赚了十几万。"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">王</div>
+                    <div>
+                        <div class="testimonial-name">王志强</div>
+                        <div class="testimonial-role">黑龙江 · 粮食合作社负责人</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA Section ===== -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>开始您的智慧农业之旅</h2>
+        <p>注册即可免费体验AI种植决策服务，让科技为您的农田赋能</p>
+        <div class="cta-buttons">
+            <a href="#demo" class="btn btn-accent">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                免费注册
+            </a>
+            <a href="#" class="btn btn-outline">
+                预约演示
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo" style="margin-bottom:4px">
+                    <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+                        <circle cx="18" cy="18" r="16" stroke="#2d9d5c" stroke-width="2"/>
+                        <path d="M18 8 C18 8 10 14 10 20 C10 24.4 13.6 28 18 28 C22.4 28 26 24.4 26 20 C26 14 18 8 18 8Z" fill="#1a6b3c" stroke="#2d9d5c" stroke-width="1.5"/>
+                        <path d="M18 14 L18 24 M14 20 L22 20" stroke="#f0a500" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>农智云 AgriMind</span>
+                </div>
+                <p>中国领先的AI驱动智慧农业平台，致力于用科技赋能农业，助力乡村振兴与粮食安全。</p>
+            </div>
+            <div class="footer-col">
+                <h4>产品</h4>
+                <ul>
+                    <li><a href="#features">核心功能</a></li>
+                    <li><a href="#pricing">价格方案</a></li>
+                    <li><a href="#">API文档</a></li>
+                    <li><a href="#">更新日志</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>MoKangMedical 生态</h4>
+                <ul>
+                    <li><a href="#">农智云 AgriMind</a></li>
+                    <li><a href="#">康健通 HealthTrack</a></li>
+                    <li><a href="#">供应链智联 SupplyChain+</a></li>
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>支持</h4>
+                <ul>
+                    <li><a href="#">帮助中心</a></li>
+                    <li><a href="#">联系我们</a></li>
+                    <li><a href="#">隐私政策</a></li>
+                    <li><a href="#">服务条款</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2026 MoKangMedical. 保留所有权利。农智云 AgriMind 为注册商标。</p>
+            <div class="footer-social">
+                <a href="#" aria-label="微信">
+                    <svg viewBox="0 0 24 24"><path d="M8.5 2C4.36 2 1 4.69 1 8c0 1.82 1.03 3.45 2.65 4.54L3 15l2.59-1.29C6.59 14.07 7.71 14.3 8.5 14.3c.29 0 .57-.02.85-.06A5.97 5.97 0 009 12.5C9 9.46 11.69 7 15 7c.34 0 .67.03 1 .08C15.33 4.16 12.18 2 8.5 2zm7 6.5c-2.76 0-5 1.79-5 4s2.24 4 5 4c.71 0 1.39-.12 2.02-.34L20 17.5l-.41-1.82C20.78 14.78 21.5 13.7 21.5 12.5c0-2.21-2.24-4-5-4z"/></svg>
+                </a>
+                <a href="#" aria-label="微博">
+                    <svg viewBox="0 0 24 24"><path d="M10.09 18.86c-3.3.35-6.17-1.16-6.4-3.37-.23-2.22 2.29-4.34 5.59-4.7 3.3-.36 6.18 1.16 6.4 3.38.23 2.21-2.29 4.33-5.59 4.69zM20.44 9.52c-.33-1.25-1.56-1.95-2.75-1.57-1.19.38-1.82 1.67-1.4 2.88.42 1.22 1.71 1.89 2.9 1.5 1.2-.39 1.58-1.59 1.25-2.81z"/></svg>
+                </a>
+                <a href="#" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85.004 1.71.12 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.16.59.67.5A10 10 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
-
+<!-- ===== JavaScript ===== -->
 <script>
-// Nav scroll
-window.addEventListener('scroll',()=>{
-  const nav=document.querySelector('nav');
-  if(window.scrollY>50)nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-  const bt=document.getElementById('backTop');
-  if(window.scrollY>500)bt.classList.add('show');else bt.classList.remove('show');
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// Reveal
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
-},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+// Mobile menu toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.getElementById('navLinks');
+const navProjects = document.getElementById('navProjects');
+mobileMenuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    navProjects.classList.toggle('open');
+});
 
-// Mobile menu
-function toggleMobile(){document.querySelector('.nav-links').classList.toggle('mobile-open')}
-
-// Diagnosis demo
-const diagnoses={
-  rice_leaf_spot:{disease:'稻瘟病',confidence:'94%',cause:'真菌 Magnaporthe oryzae',severity:'中度',treatment:'1. 喷施三环唑 75% WP 30g/亩\n2. 加强田间通风\n3. 控制氮肥施用量\n4. 及时清除病残体'},
-  rice_wilt:{disease:'水稻细菌性基腐病',confidence:'87%',cause:'细菌 Erwinia chrysanthemi',severity:'重度',treatment:'1. 排水晒田\n2. 喷施噻菌铜\n3. 增施钾肥增强抗性\n4. 严重时翻耕改种'},
-  rice_yellow:{disease:'水稻缺素症（缺氮）',confidence:'91%',cause:'土壤氮素不足',severity:'轻度',treatment:'1. 追施尿素 5-8kg/亩\n2. 叶面喷施0.5%尿素溶液\n3. 改善土壤有机质\n4. 合理轮作'},
-  rice_pest:{disease:'稻纵卷叶螟',confidence:'96%',cause:'昆虫 Cnaphalocrocis medinalis',severity:'中度',treatment:'1. 释放赤眼蜂生物防治\n2. 喷施氯虫苯甲酰胺\n3. 安装诱虫灯\n4. 保护天敌蜘蛛'},
-  wheat_leaf_spot:{disease:'小麦叶枯病',confidence:'92%',cause:'真菌 Septoria tritici',severity:'中度',treatment:'1. 喷施丙环唑\n2. 合理密植\n3. 清除田间病残体\n4. 选用抗病品种'},
-  wheat_wilt:{disease:'小麦全蚀病',confidence:'89%',cause:'真菌 Gaeumannomyces graminis',severity:'重度',treatment:'1. 轮作倒茬（3年以上）\n2. 种子处理（苯醚甲环唑）\n3. 增施有机肥\n4. 调节土壤pH'},
-  wheat_yellow:{disease:'小麦黄矮病',confidence:'88%',cause:'病毒 BYDV（蚜虫传播）',severity:'中度',treatment:'1. 防治蚜虫（吡虫啉）\n2. 选用抗病品种\n3. 适期播种避过蚜虫高峰\n4. 加强田间管理'},
-  wheat_pest:{disease:'小麦蚜虫',confidence:'97%',cause:'昆虫 Sitobion avenae',severity:'中度',treatment:'1. 释放蚜茧蜂\n2. 喷施吡虫啉\n3. 黄板诱杀\n4. 保护瓢虫天敌'},
-  corn_leaf_spot:{disease:'玉米大斑病',confidence:'93%',cause:'真菌 Exserohilum turcicum',severity:'中度',treatment:'1. 喷施代森锰锌\n2. 选用抗病品种\n3. 合理密植\n4. 深翻灭茬'},
-  corn_wilt:{disease:'玉米茎腐病',confidence:'86%',cause:'真菌 Fusarium spp.',severity:'重度',treatment:'1. 轮作2-3年\n2. 种子包衣处理\n3. 排水降湿\n4. 增施钾肥'},
-  corn_yellow:{disease:'玉米缺锌症',confidence:'90%',cause:'土壤锌元素缺乏',severity:'轻度',treatment:'1. 叶面喷施0.2%硫酸锌\n2. 土壤施硫酸锌 1-2kg/亩\n3. 增施有机肥\n4. 调节土壤pH'},
-  corn_pest:{disease:'玉米螟',confidence:'95%',cause:'昆虫 Ostrinia furnacalis',severity:'中度',treatment:'1. 释放赤眼蜂\n2. 心叶期撒施Bt颗粒剂\n3. 安装杀虫灯\n4. 秸秆粉碎还田减少越冬虫源'},
-  tomato_leaf_spot:{disease:'番茄早疫病',confidence:'91%',cause:'真菌 Alternaria solani',severity:'中度',treatment:'1. 喷施百菌清\n2. 加强通风透光\n3. 控制湿度\n4. 及时摘除病叶'},
-  tomato_wilt:{disease:'番茄枯萎病',confidence:'88%',cause:'真菌 Fusarium oxysporum',severity:'重度',treatment:'1. 嫁接栽培\n2. 土壤消毒\n3. 轮作3年以上\n4. 选用抗病品种'},
-  tomato_yellow:{disease:'番茄黄化曲叶病毒病',confidence:'93%',cause:'病毒 TYLCV（烟粉虱传播）',severity:'重度',treatment:'1. 防治烟粉虱\n2. 选用抗病品种\n3. 隔离育苗\n4. 及时拔除病株'},
-  tomato_pest:{disease:'番茄棉铃虫',confidence:'94%',cause:'昆虫 Helicoverpa armigera',severity:'中度',treatment:'1. 释放赤眼蜂\n2. 喷施甲维盐\n3. 人工摘除虫果\n4. 安装诱捕器'}
+// Scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
 };
 
-function runDiagnosis(){
-  const crop=document.getElementById('cropSelect').value;
-  const symptom=document.getElementById('symptomSelect').value;
-  const result=document.getElementById('demoResult');
-  
-  if(!crop||!symptom){
-    result.innerHTML='<span style="color:var(--amber)">请先选择作物和症状</span>';
-    return;
-  }
-  
-  const key=crop+'_'+symptom;
-  const d=diagnoses[key];
-  
-  if(d){
-    result.innerHTML=`
-      <div style="margin-bottom:12px">
-        <span style="font-size:18px;font-weight:800;color:var(--accent2)">${d.disease}</span>
-        <span style="float:right;font-size:12px;background:rgba(22,163,74,.15);color:var(--accent2);padding:3px 8px;border-radius:4px">置信度 ${d.confidence}</span>
-      </div>
-      <div style="margin-bottom:8px"><strong>病因：</strong>${d.cause}</div>
-      <div style="margin-bottom:8px"><strong>严重程度：</strong><span style="color:${d.severity==='重度'?'var(--red)':d.severity==='中度'?'var(--amber)':'var(--green)'}">${d.severity}</span></div>
-      <div><strong>防治方案：</strong><br>${d.treatment.replace(/\n/g,'<br>')}</div>
-    `;
-  } else {
-    result.innerHTML='<span style="color:var(--text3)">暂无该组合的诊断数据，请尝试其他选项</span>';
-  }
-}
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.classList.add('visible');
+            }, index * 80);
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
 
-// Charts
-let mainChart;
-function initChart(){
-  const ctx=document.getElementById('mainChart').getContext('2d');
-  mainChart=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['水稻','小麦','玉米','大豆','棉花','油菜'],
-      datasets:[{
-        label:'2024年产量（万吨）',
-        data:[21000,13800,28900,2080,590,1650],
-        backgroundColor:['rgba(22,163,74,.7)','rgba(6,182,212,.7)','rgba(245,158,11,.7)','rgba(139,92,246,.7)','rgba(236,72,153,.7)','rgba(239,68,68,.7)'],
-        borderColor:['#16a34a','#06b6d4','#f59e0b','#8b5cf6','#ec4899','#ef4444'],
-        borderWidth:1,
-        borderRadius:6
-      }]
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Demo recommendation data
+const recommendations = {
+    north: {
+        wheat: {
+            title: '华北平原 · 小麦种植推荐',
+            items: [
+                { label: '推荐品种', value: '济麦22、鲁原502' },
+                { label: '最佳播期', value: '10月5日-15日' },
+                { label: '播种密度', value: '15-18万株/亩' },
+                { label: '预计亩产', value: '550-650公斤' },
+                { label: '灌溉建议', value: '返青期+灌浆期' },
+                { label: '市场预估', value: '¥1.45-1.55/斤 ↑' }
+            ]
+        },
+        corn: {
+            title: '华北平原 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '郑单958、先玉335' },
+                { label: '最佳播期', value: '6月5日-15日' },
+                { label: '播种密度', value: '4500-5000株/亩' },
+                { label: '预计亩产', value: '600-750公斤' },
+                { label: '灌溉建议', value: '拔节期+抽雄期' },
+                { label: '市场预估', value: '¥1.35-1.45/斤 →' }
+            ]
+        },
+        rice: {
+            title: '华北平原 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '津稻9618、冀稻18' },
+                { label: '最佳播期', value: '4月中旬育秧' },
+                { label: '播种密度', value: '1.5-2万穴/亩' },
+                { label: '预计亩产', value: '550-650公斤' },
+                { label: '灌溉建议', value: '浅水插秧，深水护苗' },
+                { label: '市场预估', value: '¥1.50-1.60/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '华北平原 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '齐黄34、郑1307' },
+                { label: '最佳播期', value: '6月上中旬' },
+                { label: '播种密度', value: '1.2-1.5万株/亩' },
+                { label: '预计亩产', value: '180-220公斤' },
+                { label: '灌溉建议', value: '花荚期重点补水' },
+                { label: '市场预估', value: '¥2.60-2.80/斤 ↑' }
+            ]
+        },
+        cotton: {
+            title: '华北平原 · 棉花种植推荐',
+            items: [
+                { label: '推荐品种', value: '鲁棉研28、中棉所49' },
+                { label: '最佳播期', value: '4月15日-25日' },
+                { label: '播种密度', value: '3000-3500株/亩' },
+                { label: '预计亩产', value: '籽棉280-350公斤' },
+                { label: '灌溉建议', value: '花铃期充足供水' },
+                { label: '市场预估', value: '¥3.80-4.20/斤 →' }
+            ]
+        },
+        vegetable: {
+            title: '华北平原 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '番茄、黄瓜、辣椒' },
+                { label: '最佳定植', value: '8月-9月（秋延后）' },
+                { label: '棚型建议', value: '日光温室+地暖' },
+                { label: '预计收益', value: '2-3万元/亩/季' },
+                { label: '灌溉建议', value: '滴灌+水肥一体化' },
+                { label: '市场预估', value: '蔬菜均价稳中有升 ↑' }
+            ]
+        }
     },
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#71717a'}},
-        x:{grid:{display:false},ticks:{color:'#a1a1aa'}}
-      }
+    northeast: {
+        wheat: {
+            title: '东北平原 · 小麦种植推荐',
+            items: [
+                { label: '推荐品种', value: '龙麦35、克旱16' },
+                { label: '最佳播期', value: '3月下旬-4月初' },
+                { label: '播种密度', value: '40-45万粒/亩' },
+                { label: '预计亩产', value: '350-450公斤' },
+                { label: '灌溉建议', value: '分蘖期+拔节期' },
+                { label: '市场预估', value: '¥1.30-1.40/斤 →' }
+            ]
+        },
+        corn: {
+            title: '东北平原 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '先玉696、大丰30' },
+                { label: '最佳播期', value: '4月25日-5月10日' },
+                { label: '播种密度', value: '4000-4500株/亩' },
+                { label: '预计亩产', value: '700-900公斤' },
+                { label: '灌溉建议', value: '自然降水为主' },
+                { label: '市场预估', value: '¥1.25-1.35/斤 ↑' }
+            ]
+        },
+        rice: {
+            title: '东北平原 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '稻花香2号、五优稻4号' },
+                { label: '最佳播期', value: '4月上旬育秧' },
+                { label: '播种密度', value: '9×4寸插秧' },
+                { label: '预计亩产', value: '500-600公斤' },
+                { label: '灌溉建议', value: '浅-湿-干交替灌溉' },
+                { label: '市场预估', value: '¥2.00-2.50/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '东北平原 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '合丰55、黑河43' },
+                { label: '最佳播期', value: '5月上旬' },
+                { label: '播种密度', value: '1.8-2.2万株/亩' },
+                { label: '预计亩产', value: '170-200公斤' },
+                { label: '灌溉建议', value: '花荚期如干旱需补水' },
+                { label: '市场预估', value: '¥2.50-2.70/斤 ↑' }
+            ]
+        },
+        cotton: {
+            title: '东北平原 · 棉花种植推荐',
+            items: [
+                { label: '适应性提示', value: '东北非主要棉区' },
+                { label: '推荐品种', value: '早熟耐寒品种' },
+                { label: '最佳播期', value: '5月中旬（需地膜）' },
+                { label: '风险提示', value: '积温不足风险较高' },
+                { label: '替代建议', value: '建议改种亚麻或大豆' },
+                { label: '市场预估', value: '产量偏低，不建议' }
+            ]
+        },
+        vegetable: {
+            title: '东北平原 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '番茄、叶菜、食用菌' },
+                { label: '最佳定植', value: '3月-4月（春提早）' },
+                { label: '棚型建议', value: '加温日光温室' },
+                { label: '预计收益', value: '1.5-2.5万元/亩/季' },
+                { label: '灌溉建议', value: '滴灌+防冻措施' },
+                { label: '市场预估', value: '冬春季蔬菜溢价高 ↑' }
+            ]
+        }
+    },
+    yangtze: {
+        wheat: {
+            title: '长江中下游 · 小麦种植推荐',
+            items: [
+                { label: '推荐品种', value: '扬麦25、宁麦13' },
+                { label: '最佳播期', value: '10月下旬-11月初' },
+                { label: '播种密度', value: '16-20万株/亩' },
+                { label: '预计亩产', value: '400-500公斤' },
+                { label: '灌溉建议', value: '注意排水防渍' },
+                { label: '市场预估', value: '¥1.35-1.45/斤 →' }
+            ]
+        },
+        corn: {
+            title: '长江中下游 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '中单909、苏玉29' },
+                { label: '最佳播期', value: '3月中旬/6月中旬' },
+                { label: '播种密度', value: '3800-4200株/亩' },
+                { label: '预计亩产', value: '500-650公斤' },
+                { label: '灌溉建议', value: '注意防涝排渍' },
+                { label: '市场预估', value: '¥1.30-1.40/斤 →' }
+            ]
+        },
+        rice: {
+            title: '长江中下游 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '两优培九、扬两优6号' },
+                { label: '最佳播期', value: '5月中旬-6月初' },
+                { label: '播种密度', value: '1.5-1.8万穴/亩' },
+                { label: '预计亩产', value: '600-750公斤' },
+                { label: '灌溉建议', value: '浅水勤灌，适时烤田' },
+                { label: '市场预估', value: '¥1.40-1.55/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '长江中下游 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '中黄13、南农47' },
+                { label: '最佳播期', value: '6月上旬' },
+                { label: '播种密度', value: '1.0-1.3万株/亩' },
+                { label: '预计亩产', value: '150-200公斤' },
+                { label: '灌溉建议', value: '花期注意排灌' },
+                { label: '市场预估', value: '¥2.70-2.90/斤 ↑' }
+            ]
+        },
+        cotton: {
+            title: '长江中下游 · 棉花种植推荐',
+            items: [
+                { label: '推荐品种', value: '中棉所63、鄂杂棉10号' },
+                { label: '最佳播期', value: '4月上旬育苗移栽' },
+                { label: '播种密度', value: '1500-1800株/亩' },
+                { label: '预计亩产', value: '籽棉250-300公斤' },
+                { label: '灌溉建议', value: '花铃期注意排水' },
+                { label: '市场预估', value: '¥3.50-4.00/斤 →' }
+            ]
+        },
+        vegetable: {
+            title: '长江中下游 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '番茄、辣椒、西兰花' },
+                { label: '最佳定植', value: '全年可种植' },
+                { label: '棚型建议', value: '连栋大棚+防虫网' },
+                { label: '预计收益', value: '1.8-3万元/亩/季' },
+                { label: '灌溉建议', value: '滴灌+防高温高湿' },
+                { label: '市场预估', value: '特色蔬菜需求旺盛 ↑' }
+            ]
+        }
+    },
+    south: {
+        wheat: {
+            title: '华南地区 · 小麦种植推荐',
+            items: [
+                { label: '适应性提示', value: '华南非主要小麦区' },
+                { label: '替代建议', value: '建议改种冬种蔬菜' },
+                { label: '风险提示', value: '高温高湿不利于小麦' },
+                { label: '冬季作物', value: '可种植马铃薯、油菜' },
+                { label: '灌溉建议', value: '不适用' },
+                { label: '市场预估', value: '建议选择热带优势作物' }
+            ]
+        },
+        corn: {
+            title: '华南地区 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '桂单0810、粤甜28号' },
+                { label: '最佳播期', value: '2月-3月（春播）' },
+                { label: '播种密度', value: '3300-3800株/亩' },
+                { label: '预计亩产', value: '450-600公斤' },
+                { label: '灌溉建议', value: '注意排水防涝' },
+                { label: '市场预估', value: '¥1.40-1.50/斤 →' }
+            ]
+        },
+        rice: {
+            title: '华南地区 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '美香占2号、象牙香占' },
+                { label: '最佳播期', value: '可种双季稻' },
+                { label: '播种密度', value: '1.8-2万穴/亩' },
+                { label: '预计亩产', value: '450-550公斤/季' },
+                { label: '灌溉建议', value: '浅水层管理' },
+                { label: '市场预估', value: '优质丝苗米¥3.0+/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '华南地区 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '华春2号、桂春8号' },
+                { label: '最佳播期', value: '2月下旬-3月' },
+                { label: '播种密度', value: '1.5-2万株/亩' },
+                { label: '预计亩产', value: '140-180公斤' },
+                { label: '灌溉建议', value: '注意排水降湿' },
+                { label: '市场预估', value: '¥2.80-3.00/斤 ↑' }
+            ]
+        },
+        cotton: {
+            title: '华南地区 · 棉花种植推荐',
+            items: [
+                { label: '适应性提示', value: '华南非主要棉区' },
+                { label: '风险提示', value: '多雨不利棉花品质' },
+                { label: '替代建议', value: '建议种植热带水果' },
+                { label: '替代作物', value: '荔枝、龙眼、芒果' },
+                { label: '灌溉建议', value: '不适用' },
+                { label: '市场预估', value: '热带水果利润更高' }
+            ]
+        },
+        vegetable: {
+            title: '华南地区 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '叶菜、苦瓜、冬瓜' },
+                { label: '最佳定植', value: '全年种植（注意台风）' },
+                { label: '棚型建议', value: '防雨棚+遮阳网' },
+                { label: '预计收益', value: '1.5-2.5万元/亩/季' },
+                { label: '灌溉建议', value: '喷灌降温+滴灌施肥' },
+                { label: '市场预估', value: '北运蔬菜需求大 ↑' }
+            ]
+        }
+    },
+    southwest: {
+        wheat: {
+            title: '西南地区 · 小麦种植推荐',
+            items: [
+                { label: '推荐品种', value: '川麦104、绵麦367' },
+                { label: '最佳播期', value: '10月下旬-11月' },
+                { label: '播种密度', value: '18-22万株/亩' },
+                { label: '预计亩产', value: '350-450公斤' },
+                { label: '灌溉建议', value: '注意条锈病防治' },
+                { label: '市场预估', value: '¥1.35-1.45/斤 →' }
+            ]
+        },
+        corn: {
+            title: '西南地区 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '川单99、渝单30' },
+                { label: '最佳播期', value: '3月中旬-4月初' },
+                { label: '播种密度', value: '3200-3600株/亩' },
+                { label: '预计亩产', value: '500-650公斤' },
+                { label: '灌溉建议', value: '坡地注意水保' },
+                { label: '市场预估', value: '¥1.40-1.50/斤 ↑' }
+            ]
+        },
+        rice: {
+            title: '西南地区 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '宜香优2115、川优6203' },
+                { label: '最佳播期', value: '3月下旬-4月上旬' },
+                { label: '播种密度', value: '1.2-1.5万穴/亩' },
+                { label: '预计亩产', value: '550-650公斤' },
+                { label: '灌溉建议', value: '利用梯田保水系统' },
+                { label: '市场预估', value: '优质稻¥1.60+/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '西南地区 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '贡秋豆5号、黔豆7号' },
+                { label: '最佳播期', value: '4月-5月' },
+                { label: '播种密度', value: '1.0-1.5万株/亩' },
+                { label: '预计亩产', value: '130-180公斤' },
+                { label: '灌溉建议', value: '注意抗旱' },
+                { label: '市场预估', value: '¥2.80-3.10/斤 ↑' }
+            ]
+        },
+        cotton: {
+            title: '西南地区 · 棉花种植推荐',
+            items: [
+                { label: '推荐品种', value: '川杂棉系列' },
+                { label: '最佳播期', value: '4月上旬' },
+                { label: '播种密度', value: '2000-2500株/亩' },
+                { label: '预计亩产', value: '籽棉200-250公斤' },
+                { label: '灌溉建议', value: '注意旱季补水' },
+                { label: '市场预估', value: '¥3.50-4.00/斤 →' }
+            ]
+        },
+        vegetable: {
+            title: '西南地区 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '辣椒、番茄、魔芋' },
+                { label: '最佳定植', value: '3月-4月（春提早）' },
+                { label: '棚型建议', value: '简易竹棚/钢架棚' },
+                { label: '预计收益', value: '1.2-2万元/亩/季' },
+                { label: '灌溉建议', value: '滴灌+地膜覆盖' },
+                { label: '市场预估', value: '辣椒等特色蔬菜需求旺 ↑' }
+            ]
+        }
+    },
+    northwest: {
+        wheat: {
+            title: '西北地区 · 小麦种植推荐',
+            items: [
+                { label: '推荐品种', value: '西农979、陇鉴386' },
+                { label: '最佳播期', value: '9月下旬-10月初' },
+                { label: '播种密度', value: '30-35万粒/亩' },
+                { label: '预计亩产', value: '300-400公斤' },
+                { label: '灌溉建议', value: '集雨补灌+覆膜' },
+                { label: '市场预估', value: '¥1.30-1.40/斤 →' }
+            ]
+        },
+        corn: {
+            title: '西北地区 · 玉米种植推荐',
+            items: [
+                { label: '推荐品种', value: '陕单636、郑单958' },
+                { label: '最佳播期', value: '4月中旬-5月初' },
+                { label: '播种密度', value: '4000-4500株/亩' },
+                { label: '预计亩产', value: '600-800公斤' },
+                { label: '灌溉建议', value: '全膜双垄沟播' },
+                { label: '市场预估', value: '¥1.30-1.40/斤 ↑' }
+            ]
+        },
+        rice: {
+            title: '西北地区 · 水稻种植推荐',
+            items: [
+                { label: '推荐品种', value: '宁粳43号、吉粳88' },
+                { label: '最佳播期', value: '4月中旬育秧' },
+                { label: '播种密度', value: '1.5-2万穴/亩' },
+                { label: '预计亩产', value: '500-600公斤' },
+                { label: '灌溉建议', value: '节水灌溉技术' },
+                { label: '市场预估', value: '宁夏大米¥2.0+/斤 ↑' }
+            ]
+        },
+        soybean: {
+            title: '西北地区 · 大豆种植推荐',
+            items: [
+                { label: '推荐品种', value: '中黄35、冀豆17' },
+                { label: '最佳播期', value: '4月下旬-5月' },
+                { label: '播种密度', value: '1.5-2万株/亩' },
+                { label: '预计亩产', value: '130-170公斤' },
+                { label: '灌溉建议', value: '覆膜保墒' },
+                { label: '市场预估', value: '¥2.50-2.80/斤 →' }
+            ]
+        },
+        cotton: {
+            title: '西北地区 · 棉花种植推荐',
+            items: [
+                { label: '推荐品种', value: '新陆中系列（新疆）' },
+                { label: '最佳播期', value: '4月上中旬' },
+                { label: '播种密度', value: '1.2-1.5万株/亩' },
+                { label: '预计亩产', value: '籽棉400-500公斤' },
+                { label: '灌溉建议', value: '膜下滴灌技术' },
+                { label: '市场预估', value: '¥3.80-4.50/斤 ↑' }
+            ]
+        },
+        vegetable: {
+            title: '西北地区 · 蔬菜大棚推荐',
+            items: [
+                { label: '推荐品种', value: '番茄、辣椒、洋葱' },
+                { label: '最佳定植', value: '3月-5月' },
+                { label: '棚型建议', value: '日光温室+保温被' },
+                { label: '预计收益', value: '1.5-3万元/亩/季' },
+                { label: '灌溉建议', value: '滴灌+集雨补灌' },
+                { label: '市场预估', value: '反季节蔬菜价格高 ↑' }
+            ]
+        }
     }
-  });
+};
+
+function generateRecommendation() {
+    const region = document.getElementById('region').value;
+    const crop = document.getElementById('crop').value;
+    const resultDiv = document.getElementById('demoResult');
+    const resultGrid = document.getElementById('resultGrid');
+
+    if (!region || !crop) {
+        alert('请先选择种植地区和作物类型');
+        return;
+    }
+
+    const data = recommendations[region]?.[crop];
+    if (!data) {
+        resultGrid.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px;">暂无该组合数据，请尝试其他选择。</p>';
+        resultDiv.classList.add('visible');
+        return;
+    }
+
+    resultGrid.innerHTML = '';
+    data.items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        div.innerHTML = `
+            <div class="result-item-label">${item.label}</div>
+            <div class="result-item-value">${item.value}</div>
+        `;
+        resultGrid.appendChild(div);
+    });
+
+    resultDiv.querySelector('h4').innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        ${data.title}
+    `;
+
+    resultDiv.classList.add('visible');
+
+    // Smooth scroll to result
+    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function switchChart(type){
-  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
-  
-  if(type==='yield'){
-    mainChart.data.datasets[0].data=[21000,13800,28900,2080,590,1650];
-    mainChart.data.datasets[0].label='2024年产量（万吨）';
-  }else{
-    mainChart.data.datasets[0].data=[2800,2600,2400,4800,15000,5200];
-    mainChart.data.datasets[0].label='2024年均价（元/吨）';
-  }
-  mainChart.update();
+// Counter animation for stats
+function animateCounters() {
+    const stats = document.querySelectorAll('.hero-stat-num');
+    // Simple visibility trigger - stats are already in HTML, we just ensure they display
+    stats.forEach(stat => {
+        stat.style.opacity = '1';
+    });
 }
 
-// Init
-document.addEventListener('DOMContentLoaded',initChart);
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Close mobile menu
+            navLinks.classList.remove('open');
+            navProjects.classList.remove('open');
+        }
+    });
+});
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('.section, .hero');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+        }
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+});
 </script>
+
 </body>
 </html>
